@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://recmiennam.com/wp-content/uploads/2018/03/hoang-hon-tren-bien-1.jpg') center center no-repeat;
+            background-size: cover;
+            opacity: 0; /* Ảnh sẽ mờ nhạt ban đầu */
+            filter: blur(10px); /* Độ mờ ban đầu */
+            transition: opacity 2s ease-in-out, filter 2s ease-in-out;
+            z-index: 2;
+        }
+
+        #text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: white;
+            opacity: 0; /* 0% xuất hiện ban đầu */
+            transition: opacity 2s ease-in-out;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay"></div>
+    <div id="text">0%</div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var overlay = document.getElementById('overlay');
+            var text = document.getElementById('text');
+
+            // Hiển thị ảnh và số 0% ban đầu
+            overlay.style.opacity = 1;
+            overlay.style.filter = 'blur(0px)';
+            text.style.opacity = 1;
+
+            // Đặt thời gian mờ → rõ và 0% - 100% (tùy chỉnh theo ý muốn)
+            var fadeInDuration = 2000; // Thời gian mờ → rõ: 2s
+            var fadeOutDuration = 2000; // Thời gian 0% → 100%: 2s
+            var totalDuration = fadeInDuration + fadeOutDuration;
+
+            setTimeout(function () {
+                var startTime = new Date().getTime();
+
+                function update() {
+                    var currentTime = new Date().getTime();
+                    var elapsed = currentTime - startTime;
+                    var progress = Math.min(1, elapsed / totalDuration);
+
+                    text.innerHTML = Math.round(progress * 100) + '%';
+
+                    overlay.style.filter = 'blur(' + (10 - 10 * progress) + 'px)'; // Điều chỉnh độ mờ
+
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    }
+                    else {
+                        // Ẩn phần tử sau khi hoàn thành hiệu ứng
+                        overlay.style.display = 'none';
+                        text.style.display = 'none';
+                    }
+                }
+
+                update();
+            }, fadeInDuration);
+        });
+    </script>
+</body>
+</html>
