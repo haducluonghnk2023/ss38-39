@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>B8</title>
+    <style>
+        .header {
+            background-color: green !important;
+            height: 70px;
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="header"><h1>Weight Converter</h1></div>
+    <p>Type a value in any of the fields to convert between weight measurements:</p>
+    <label for="pound">Pounds</label><br>
+    <input type="text" id="pound"/><br>
+    <label for="ounce">Ounces</label><br>
+    <input type="text" id="ounce"/><br>
+    <label for="stone">Stones</label><br>
+    <input type="text" id="stone"/><br>
+    <label for="kilo">Kilograms</label><br>
+    <input type="text" id="kilo"/><br> 
+    <label for="gram">Grams</label><br>
+    <input type="text" id="gram"/>
+    <p id="a"></p>
+
+    <script>
+        document.querySelectorAll("input").forEach((input) => {
+            input.addEventListener("input", updateValues);
+        });
+
+        function updateValues(e) {
+            const value = parseFloat(e.target.value);
+            if (isNaN(value)) return;
+
+            const id = e.target.id;
+            const conversions = {
+                pound: {
+                    kilo: value / 2.20462,
+                    ounce: value * 16,
+                    gram: value * 453.592,
+                    stone: value / 14,
+                },
+                kilo: {
+                    pound: value * 2.20462,
+                    ounce: value * 35.274,
+                    gram: value * 1000,
+                    stone: value * 0.157473,
+                },
+                ounce: {
+                    pound: value / 16,
+                    kilo: value / 35.274,
+                    gram: value * 28.3495,
+                    stone: value / 224,
+                },
+                gram: {
+                    pound: value / 453.592,
+                    kilo: value / 1000,
+                    ounce: value / 28.3495,
+                    stone: value / 6350.29,
+                },
+                stone: {
+                    pound: value * 14,
+                    kilo: value / 0.157473,
+                    ounce: value * 224,
+                    gram: value * 6350.29,
+                },
+            };
+            for (let otherId in conversions[id]) {
+                document.getElementById(otherId).value = conversions[id][otherId].toFixed(2);
+            }
+        }
+    </script>
+</body>
+</html>
